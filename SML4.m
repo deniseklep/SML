@@ -4,7 +4,7 @@ X = data(:,1:2); C = data(:,3);
 
 x_prev = 1; 
 for i=1:5
-   x = x_prev + (1/sin(x_prev)) * cos(x_prev)
+   x = x_prev + (1/sin(x_prev)) * cos(x_prev);
    x_prev = x; 
 end
 
@@ -63,7 +63,7 @@ phi1 = zeros([size(X(:,1)),1]);
 phi2 = zeros([size(X(:,1)),1]);
 
 for i=1:size(X(:,1))
-    phi1(i) = exp(-X(i,:)*covar*X(i,:)'+m1*X(i,:)')
+    phi1(i) = exp(-X(i,:)*covar*X(i,:)'+m1*X(i,:)');
     phi2(i) = exp(-X(i,:)*covar*X(i,:)'+m2*X(i,:)');
 end
 
@@ -83,7 +83,7 @@ colorbar; % what do the colors mean?
 phi3 = ones([1000,3]);
 phi3(:,2:3) = phi;
 
-[w,z] = IRLS(phi3,C,w_init,5)
+[w,z] = IRLS(phi3,C,w_init,5);
 
 X = load('a011_mixdata.txt', '-ASCII');
 figure()
@@ -92,3 +92,8 @@ figure()
 scatter(X(:,1), X(:,4));
 figure()
 scatter3(X(:,1), X(:,2), X(:,4));
+
+K=3;
+EM(X,K)
+
+% sigma_k1 = 
