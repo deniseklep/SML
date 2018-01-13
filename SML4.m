@@ -25,7 +25,7 @@ w_prev = [1.0,1.0]';
 % cl = 1./(1+exp(-x(:,1))); 
 
 % this seems to work
-mycolormap = colormap('Jet');
+mycolormap = colormap();
 d64 = [0:63]/63; % 
 c = interp1(d64, mycolormap,C);
 dotsize = 10;
@@ -42,7 +42,7 @@ w_init = [0,0,0]';
 z = sign(sign(z)+1); 
 
 figure()
-mycolormap = colormap('Jet');
+mycolormap = colormap();
 d64 = [0:63]/63; % 
 c = interp1(d64, mycolormap,z);
 dotsize = 10;
@@ -70,7 +70,7 @@ end
 phi = [phi1,phi2];
 
 figure()
-mycolormap = colormap('Jet');
+mycolormap = colormap();
 d64 = [0:63]/63; % 
 c = interp1(d64, mycolormap,z);
 dotsize = 10;
@@ -87,11 +87,11 @@ phi3(:,2:3) = phi;
 
 X = load('a011_mixdata.txt', '-ASCII');
 figure()
-hist(X(4));
+hist(X);
 figure()
-scatter(X(:,1), X(:,4));
+scatter(X(:,1), X(:,2));
 figure()
-scatter3(X(:,1), X(:,2), X(:,4));
+scatter3(X(:,1), X(:,2), X(:,3));
 
-K=2;
-EM2(X,K)
+K=3;
+EM(X,K)
