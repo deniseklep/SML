@@ -23,7 +23,7 @@ function [ mu_k,sigma_k, pi_k ] = EM2( X,K )
        logl = logl +  log(ll);
     end
     
-    for i=1:40
+    for i=1:60
         gamma = zeros([N,K]);
         for j=1:size(X(:,1),1)
             pi_j = 0;
@@ -40,12 +40,24 @@ function [ mu_k,sigma_k, pi_k ] = EM2( X,K )
         
         for k=1:K
            N_k = sum(gamma(:,k));
-           mu_k(k,:) = (1/N_k) .* (sum(gamma(:,k).*X));
-           sigma_k(k,:,:) = 0;
-           for j=1:size(X(:,1))
-                sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4]) + gamma(j,k).*((X(j,:)-mu_k(k,:))'*(X(j,:)-mu_k(k,:)));
-           end
-           sigma_k(k,:,:) = sigma_k(k,:,:)./N_k;
+%            mu_k(k,:) = (1/N_k) .* (sum(gamma(:,k).*X'));
+           mu_k(k,:) = (1./N_k) .* (gamma(:,k)'*X);
+%            size(X)
+%            size(mu_k(k,:))
+%            size((X-ones(size(X)).*(mu_k(k,:))))
+%            (X-ones(size(X))*(mu_k(k,:)))*(X-ones(size(X)*mu_k(k,:)))'
+%            size(repmat(mu_k(k,:),[size(X,1),1]))
+%            (X-repmat(mu_k(k,:),[size(X,1),1]))
+%            (X-repmat(mu_k(k,:),[size(X,1),1]))*(X-repmat(mu_k(k,:),[size(X,1),1]))'
+%            (gamma(:,k)'*(X-repmat(mu_k(k,:),[size(X,1),1]))*(X-repmat(mu_k(k,:),[size(X,1),1]))')
+%            size((1./N_k) .* (gamma(:,k)'*(X-repmat(mu_k(k,:),[size(X,1),1]))*(X-repmat(mu_k(k,:),[size(X,1),1]))'))
+%            size(repmat(gamma(:,k),[1,4]))
+           sigma_k(k,:,:) = (1./N_k) .* (repmat(gamma(:,k)',[4,1]).*(X-repmat(mu_k(k,:),[size(X,1),1]))'*(X-repmat(mu_k(k,:),[size(X,1),1])));
+%            sigma_k(k,:,:) = 0;
+%            for j=1:size(X(:,1))
+%                 sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4]) + gamma(j,k).*((X(j,:)-mu_k(k,:))'*(X(j,:)-mu_k(k,:)));
+%            end
+%            sigma_k(k,:,:) = sigma_k(k,:,:)./N_k;
            pi_k(k) = N_k/N;
         end
         
@@ -57,7 +69,7 @@ function [ mu_k,sigma_k, pi_k ] = EM2( X,K )
             end
            logl = logl +  log(ll);
         end
-        logl;
+        logl
     end
 %     scatter(mu_k(:,1), mu_k(:,2), 20, 'green');
     size(gamma)
@@ -71,6 +83,7 @@ function [ mu_k,sigma_k, pi_k ] = EM2( X,K )
     d64 = [0:63]/63; % 
     c = interp1(d64, mycolormap,z);
     dotsize = 10;
-    scatter(X(:,1), X(:,2),dotsize,c;
+    scatter(X(:,1), X(:,2),dotsize,c);
+    colorbar; 
 end
 

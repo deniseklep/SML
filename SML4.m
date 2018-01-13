@@ -93,7 +93,5 @@ scatter(X(:,1), X(:,4));
 figure()
 scatter3(X(:,1), X(:,2), X(:,4));
 
-K=3;
-EM(X,K)
-
-% sigma_k1 = 
+K=2;
+EM2(X,K)
