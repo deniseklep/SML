@@ -38,15 +38,18 @@ function [ mu_k,sigma_k, pi_k ] = EM( X,K )
         
         for k=1:K
            N_k = sum(gamma(:,k));
-           mu_k(k,:) = (1/N_k) .* (sum(gamma(:,k).*X));
-           sigma_k(k,:,:) = 0;
-           for j=1:size(X(:,1))
-                sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4]) + gamma(j,k).*((X(j,:)-mu_k(k,:))'*(X(j,:)-mu_k(k,:)));
-           end
-           sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4])./N_k;
-           pi_k(k) = N_k/N;
-        end
+%            mu_k(k,:) = (1/N_k) .* (sum(gamma(:,k).*X));
+           mu_k(k,:) = (1/N_k) .* (gamma(:,k)'*X) ; 
+           sigma_k(k,:,:) = (1./N_k) .* (repmat(gamma(:,k)',[4,1]).*(X-repmat(mu_k(k,:),[size(X,1),1]))'*(X-repmat(mu_k(k,:),[size(X,1),1])));
+%            sigma_k(k,:,:) = 0;
+%            for j=1:size(X(:,1))
+%                 sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4]) + gamma(j,k).*((X(j,:)-mu_k(k,:))'*(X(j,:)-mu_k(k,:)));
+%            end
+%            sigma_k(k,:,:) = reshape(sigma_k(k,:,:),[4,4])./N_k;
+%            pi_k(k) = N_k/N;
+%         end
 %         scatter(gamma(:,1), gamma(:,2), 10, 'red');
+        end
         logl=0;
         for j=1:N
            ll =0;
@@ -55,8 +58,15 @@ function [ mu_k,sigma_k, pi_k ] = EM( X,K )
             end
            logl = logl +  log(ll);
         end
-        logl;
+        logl
     end
+    c_12 = sigma_k(1:K,1,2)
+    v_1 = sigma_k(1:K,1,1)
+    v_2 = sigma_k(1:K,2,2)
+    size(c_12)
+    size(v_1)
+    size(v_2)
+    corrc = c_12./sqrt(v_1.*v_2)
     [m,z] = max(gamma,[],2);
     z = z/K;
     figure()
@@ -65,5 +75,6 @@ function [ mu_k,sigma_k, pi_k ] = EM( X,K )
     c = interp1(d64, mycolormap,z);
     dotsize = 10;
     scatter(X(:,1), X(:,2),dotsize,c);
+    colorbar; 
 end
 

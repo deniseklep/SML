@@ -93,5 +93,5 @@ scatter(X(:,1), X(:,2));
 figure()
 scatter3(X(:,1), X(:,2), X(:,3));
 
-K=3;
+K=2;
 EM(X,K)
